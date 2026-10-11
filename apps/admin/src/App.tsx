@@ -69,8 +69,21 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   if (!response.ok) {
     const body = (await response.json().catch(() => ({}))) as {
       message?: string;
+      issues?: Array<{ path: Array<string | number>; message: string }>;
     };
-    throw new Error(body.message ?? `Request failed (${response.status})`);
+    const details = body.issues
+      ?.map(
+        (issue) =>
+          (issue.path.map(String).join(".") || "request") +
+          ": " +
+          issue.message,
+      )
+      .join("; ");
+    throw new Error(
+      details
+        ? (body.message ?? "Invalid request") + " - " + details
+        : (body.message ?? "Request failed (" + response.status + ")"),
+    );
   }
   if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;
