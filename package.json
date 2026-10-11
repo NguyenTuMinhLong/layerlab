@@ -1,0 +1,25 @@
+{
+  "name": "layerlab",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web,admin -c white,gray,blue \"bun run --cwd apps/api dev\" \"bun run --cwd apps/web dev\" \"bun run --cwd apps/admin dev\"",
+    "dev:api": "bun run --cwd apps/api dev",
+    "dev:web": "bun run --cwd apps/web dev",
+    "dev:admin": "bun run --cwd apps/admin dev",
+    "build": "bun run --cwd apps/api build && bun run --cwd apps/web build && bun run --cwd apps/admin build",
+    "typecheck": "bun run --cwd apps/api typecheck && bun run --cwd apps/web typecheck && bun run --cwd apps/admin typecheck",
+    "test": "bun run --cwd apps/api test",
+    "seed": "bun run --cwd apps/api seed",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "bun@1.4.0"
+}
